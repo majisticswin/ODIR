@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Page for Invoice</title>
+</head>
+<body>
+  <h1>Test Page for Invoice</h1>
+
+  <p><strong>Invoice ID:</strong> {{ invoice.invoice_id }}</p>
+  <p><strong>Order ID:</strong> {{ invoice.order_id }}</p>
+  <p><strong>Issue date:</strong> {{ invoice.issue_date }}</p>
+  <p><strong>Customer:</strong> {{ invoice.customer_name }}</p>
+  <p><strong>Delivery address:</strong> {{ invoice.delivery_address }}</p>
+  <p><strong>Order status:</strong> {{ invoice.status }}</p>
+  <p><strong>Payment:</strong> {{ invoice.payment_message }}</p>
+
+  <h2>Order items</h2>
+  <table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+      <th>Book</th>
+      <th>Author</th>
+      <th>Quantity</th>
+      <th>Unit price</th>
+      <th>Line total</th>
+    </tr>
+    {% for item in invoice.order_items %}
+    <tr>
+      <td>{{ item.title }}</td>
+      <td>{{ item.author }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>${{ "%.2f"|format(item.unit_price) }}</td>
+      <td>${{ "%.2f"|format(item.line_total) }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <p><strong>Total payable:</strong> ${{ "%.2f"|format(invoice.total_payable) }}</p>
+
+  <p><a href="/">Back to catalogue</a></p>
+</body>
+</html>
