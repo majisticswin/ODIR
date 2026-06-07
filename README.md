@@ -1,4 +1,4 @@
-# 🏪 The Book Haven — Online Bookstore
+# 🏪 Favourite Books — Online Bookstore
 
 > **CS30003 — Assignment 3: Design Implementation**  
 A lightweight online bookstore built with **Python (Flask)** and **HTML/CSS**, split across four feature areas developed independently by each team member.
