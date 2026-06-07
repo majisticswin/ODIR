@@ -197,6 +197,13 @@
 
 <header>
   <h1>🏪 The Book Haven</h1>
+  <!-- Added by Mitul: Login / Account nav button -->
+  {% if session.customer_name %}
+    <a href="/account" style="margin-left:auto;color:#fff;text-decoration:none;font-size:0.88rem;font-weight:500;padding:7px 16px;border:1px solid rgba(255,255,255,0.4);border-radius:4px;">👤 {{ session.customer_name }}</a>
+  {% else %}
+    <a href="/login" style="margin-left:auto;color:#fff;text-decoration:none;font-size:0.88rem;font-weight:500;padding:7px 16px;border:1px solid rgba(255,255,255,0.4);border-radius:4px;">Login</a>
+  {% endif %}
+  <!-- End Mitul -->
 </header>
 
 <div class="hero">
