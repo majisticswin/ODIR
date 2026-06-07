@@ -252,7 +252,7 @@
 
   function render(books, query) {
     document.getElementById('status').textContent = query
-      ? `${books.length} result(s) for "${query}"`
+      ? `${books.length} results for "${query}"`
       : `${books.length} books in catalogue`;
 
     if (!books.length) {
