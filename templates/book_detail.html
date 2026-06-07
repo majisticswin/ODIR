@@ -52,7 +52,11 @@
 
     {% if book.in_stock %}
       <div class="badge in-stock">In stock</div><br>
-      <button class="btn" onclick="alert('Add to cart is part of Area 3 – Shopping Cart.')">Add to Cart</button>
+      <form method="POST" action="/cart/add">
+        <input type="hidden" name="book_id" value="{{ book.book_id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button class="btn" type="submit">Add to Cart</button>
+      </form>
     {% else %}
       <div class="badge out-of-stock">Out of stock</div><br>
       <button class="btn" disabled>Unavailable</button>

@@ -7,6 +7,7 @@ from catalogue import Catalogue, CatalogueManager
 from data import seed_catalogue
 from customer import Customer  # Added by Mitul: Customer Account (Area 1)
 from order import OrderManager
+from shopping_cart import ShoppingCart
 
 app = Flask(__name__)
 app.secret_key = 'bookstore-secret-2026'  # Added by Mitul: required for session
@@ -16,6 +17,14 @@ catalogue = Catalogue()
 seed_catalogue(catalogue)
 manager = CatalogueManager(catalogue)
 order_manager = OrderManager(manager)
+carts = {}
+
+
+def get_cart(customer_id="guest"):
+    if customer_id not in carts:
+        carts[customer_id] = ShoppingCart(customer_id, manager)
+    carts[customer_id].remove_expired_items()
+    return carts[customer_id]
 
 
 @app.route("/")
@@ -48,6 +57,72 @@ def book_detail(book_id):
     return render_template("book_detail.html", book=book.to_dict())
 
 
+@app.route("/cart")
+def cart_page():
+    cart = get_cart()
+    items = cart.get_display_items()
+    subtotal = cart.calculate_total()
+    shipping = 4.99 if items else 0.00
+    return render_template(
+        "cart.html",
+        items=items,
+        subtotal=subtotal,
+        shipping=shipping,
+        total=subtotal + shipping,
+        error=request.args.get("error")
+    )
+
+
+@app.route("/cart/add", methods=["POST"])
+def cart_add():
+    cart = get_cart()
+    try:
+        cart.add_item(
+            request.form.get("book_id", ""),
+            request.form.get("quantity", "1")
+        )
+    except ValueError as exc:
+        return redirect(url_for("cart_page", error=str(exc)))
+    return redirect(url_for("cart_page"))
+
+
+@app.route("/cart/remove", methods=["POST"])
+def cart_remove():
+    cart = get_cart()
+    try:
+        cart.remove_item(request.form.get("book_id", ""))
+    except ValueError as exc:
+        return redirect(url_for("cart_page", error=str(exc)))
+    return redirect(url_for("cart_page"))
+
+
+@app.route("/cart/update", methods=["POST"])
+def cart_update():
+    cart = get_cart()
+    try:
+        cart.update_quantity(
+            request.form.get("book_id", ""),
+            request.form.get("quantity", "1")
+        )
+    except ValueError as exc:
+        return redirect(url_for("cart_page", error=str(exc)))
+    return redirect(url_for("cart_page"))
+
+
+@app.route("/cart/checkout", methods=["POST"])
+def cart_checkout():
+    cart = get_cart()
+    try:
+        order, invoice = order_manager.place_order_from_items(
+            customer_name=request.form.get("customer_name", ""),
+            delivery_address=request.form.get("delivery_address", ""),
+            checkout_items=cart.checkout_items()
+        )
+        cart.clear_cart()
+        return render_template("invoice.html", invoice=invoice.to_dict())
+    except ValueError as exc:
+        return redirect(url_for("cart_page", error=str(exc)))
+
 
 @app.route("/order/<book_id>", methods=["GET", "POST"])
 def place_order(book_id):
@@ -71,6 +146,8 @@ def place_order(book_id):
 
     return render_template("order_form.html", book=book.to_dict(), error=error)
 
+
+# =============================================================================
 # =============================================================================
 # Added by Mitul — Area 1: Customer Account (Register / Login / Logout)
 # =============================================================================
