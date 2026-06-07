@@ -1,4 +1,4 @@
-"""shopping_cart.py - Cart management for the Favourite Books app."""
+"""Shopping cart management for the Favourite Books app."""
 
 from cart_item import CartItem
 
@@ -28,6 +28,7 @@ class ShoppingCart:
             raise ValueError(f"'{book.title}' is out of stock.")
 
         existing = self._find_item(book_id)
+        # If the book is already in the cart, its quantity is increased instead
         new_quantity = quantity if existing is None else existing.quantity + quantity
         if book.stock < new_quantity:
             raise ValueError("Not enough stock is available for this book.")
@@ -49,6 +50,7 @@ class ShoppingCart:
         self.items.remove(item)
 
     def update_quantity(self, book_id, quantity):
+        # Updates the cart amount but still checks the available stock
         quantity = int(quantity)
         if quantity < 1:
             raise ValueError("Quantity must be at least 1.")
@@ -84,6 +86,7 @@ class ShoppingCart:
         return display_items
 
     def checkout_items(self):
+        # Sends only the details needed by the order manager at checkout
         return [
             {"book_id": item.book_id, "quantity": item.quantity}
             for item in self.items

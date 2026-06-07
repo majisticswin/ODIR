@@ -1,4 +1,4 @@
-# seed_data.py
+# Sample catalogue data
 
 from book import Book, BookCategory
 
@@ -6,6 +6,7 @@ from book import Book, BookCategory
 def seed_catalogue(catalogue):
     """Load sample categories and books into the catalogue."""
 
+    # Categories are created first so each book can be linked to one
     fiction    = BookCategory("CAT001", "Fiction")
     science    = BookCategory("CAT002", "Science")
     history    = BookCategory("CAT003", "History")

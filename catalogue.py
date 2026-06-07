@@ -4,8 +4,8 @@ class Catalogue:
     """Stores all books and categories."""
 
     def __init__(self):
-        self.books = {}        # book_id - Book
-        self.categories = {}   # category_id - BookCategory
+        self.books = {}        # Maps book IDs to Book objects
+        self.categories = {}   # Maps category IDs to BookCategory objects
 
     def add_category(self, category):
         self.categories[category.category_id] = category
@@ -23,7 +23,8 @@ class Catalogue:
         return self.books.get(book_id)
 
     def search(self, query):
-        """Search by title, author, or ISBN (case-insensitive)."""
+        """Search by title, author, or ISBN."""
+        # Makes the search ignore capital letters for title and author matches
         q = query.lower()
         return [
             b for b in self.books.values()
@@ -50,6 +51,7 @@ class CatalogueManager:
         return self.catalogue.get_book_by_id(book_id)
 
     def search_books(self, query):
+        # Empty searches show the full catalogue instead of no results
         if not query.strip():
             return self.catalogue.get_all_books()
         return self.catalogue.search(query)

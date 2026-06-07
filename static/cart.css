@@ -1,4 +1,4 @@
-/* The Book Haven - Cart Page */
+/* Cart page layout and invoice styling */
 
 * {
     box-sizing: border-box;
@@ -13,6 +13,7 @@ body {
 }
 
 .site-header {
+    /* Keeps the cart and invoice header the same as the main page */
     background: #111;
     padding: 0 32px;
     height: 60px;
@@ -83,6 +84,7 @@ body {
 }
 
 .cart-card {
+    /* Styles each book shown inside the cart */
     background: #fff;
     border-radius: 6px;
     padding: 1rem;
@@ -153,6 +155,7 @@ body {
 }
 
 .qty-stepper {
+    /* Groups the quantity buttons and number box together */
     display: flex;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -214,6 +217,7 @@ body {
 }
 
 .order-summary {
+    /* Keeps the checkout total visible beside the cart */
     background: #fff;
     border-radius: 6px;
     padding: 1.5rem;
@@ -345,6 +349,7 @@ body {
 }
 
 .invoice-card {
+    /* Gives the invoice content a simple card layout */
     background: #fff;
     border-radius: 6px;
     padding: 1.5rem;

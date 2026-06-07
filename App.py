@@ -1,5 +1,5 @@
 # app.py
-# Favourite Books — Area 2: Browse Catalogue & Search Books
+# Favourite Books application routes
 
 from flask import Flask, render_template, request, jsonify
 from flask import session, redirect, url_for  
@@ -12,7 +12,7 @@ from shopping_cart import ShoppingCart
 app = Flask(__name__)
 app.secret_key = 'bookstore-secret-2026'  
 
-# Bootstrap: creates catalogue, loads data, wraps in manager
+# Creates the catalogue and loads the sample book data
 catalogue = Catalogue()
 seed_catalogue(catalogue)
 manager = CatalogueManager(catalogue)
@@ -21,12 +21,13 @@ carts = {}
 
 
 def get_cart(customer_id="guest"):
+    # Gets the current cart and removes old items before showing or using it
     if customer_id not in carts:
         carts[customer_id] = ShoppingCart(customer_id, manager)
     carts[customer_id].remove_expired_items()
     return carts[customer_id]
 
-# Added by Dan: Aread 1 For Browse Catalogue
+# Catalogue routes
 @app.route("/")
 def index():
     categories = manager.get_all_categories()
@@ -35,6 +36,7 @@ def index():
 
 @app.route("/search")
 def search():
+    # Reads the search text and selected category from the catalogue page
     query    = request.args.get("q", "").strip()
     category = request.args.get("category", "").strip()
 
@@ -56,7 +58,7 @@ def book_detail(book_id):
         return "Book not found", 404
     return render_template("book_detail.html", book=book.to_dict())
 
-# Added by Mun — Area 3: Manage Shopping Cart
+# Shopping cart routes
 @app.route("/cart")
 def cart_page():
     cart = get_cart()
@@ -108,9 +110,10 @@ def cart_update():
         return redirect(url_for("cart_page", error=str(exc)))
     return redirect(url_for("cart_page"))
 
-# Added by Alex — Area 4: Place Order & Invoice
+# Order and invoice routes
 @app.route("/cart/checkout", methods=["POST"])
 def cart_checkout():
+    # Creates the order from the cart items and then shows the invoice
     cart = get_cart()
     try:
         order, invoice = order_manager.place_order_from_items(
@@ -118,6 +121,7 @@ def cart_checkout():
             delivery_address=request.form.get("delivery_address", ""),
             checkout_items=cart.checkout_items()
         )
+        # The cart is cleared so the same items are not ordered twice
         cart.clear_cart()
         return render_template("invoice.html", invoice=invoice.to_dict())
     except ValueError as exc:
@@ -126,7 +130,7 @@ def cart_checkout():
 
 @app.route("/order/<book_id>", methods=["GET", "POST"])
 def place_order(book_id):
-    # Route for order placement and invoice generation.
+    # Direct order page used to place an order from one selected book
     book = manager.get_book_by_id(book_id)
     if not book:
         return "Book not found", 404
@@ -146,7 +150,7 @@ def place_order(book_id):
 
     return render_template("order_form.html", book=book.to_dict(), error=error)
 
-# Added by Mitul — Area 1: Customer Account
+# Customer account routes
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -154,6 +158,7 @@ def register():
     if request.method == 'GET':
         return render_template('register.html', error=None, form={})
 
+    # Form values are trimmed before the account is validated
     first_name       = request.form.get('first_name', '').strip()
     last_name        = request.form.get('last_name', '').strip()
     email            = request.form.get('email', '').strip()
@@ -164,6 +169,7 @@ def register():
     form_data = {'first_name': first_name, 'last_name': last_name,
                  'email': email, 'phone': phone}
 
+    # Registration checks stop invalid customer details being saved
     if not all([first_name, last_name, email, phone, password, confirm_password]):
         return render_template('register.html', error='All fields are required.', form=form_data)
     if password != confirm_password:
@@ -205,6 +211,7 @@ def logout():
 
 @app.route('/account')
 def account():
+    # The account page is only shown when a customer is logged in
     if 'customer_email' not in session:
         return redirect(url_for('login'))
     customer = Customer.find_by_email(session['customer_email'])

@@ -48,6 +48,7 @@
 <div class="container">
   <a class="back" href="/">← Back to catalogue</a>
 
+  <!-- Shows the selected book details before it is added to the cart -->
   <div class="card">
     <div class="category">{{ book.category_name }}</div>
     <h2>{{ book.title }}</h2>
@@ -65,6 +66,7 @@
 
     {% if book.in_stock %}
       <div class="badge in-stock">In stock</div><br>
+      <!-- Sends the selected book to the shopping cart -->
       <form method="POST" action="/cart/add">
         <input type="hidden" name="book_id" value="{{ book.book_id }}">
         <input type="hidden" name="quantity" value="1">

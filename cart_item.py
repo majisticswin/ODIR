@@ -1,4 +1,4 @@
-"""cart_item.py - Data class for a single shopping cart item."""
+"""Data class for a single shopping cart item."""
 
 import time
 
@@ -14,9 +14,11 @@ class CartItem:
         self.added_at = added_at or time.time()
 
     def is_expired(self, timeout_seconds=86400):
+        # Checks whether the cart item has been left for too long
         return (time.time() - self.added_at) > timeout_seconds
 
     def to_dict(self):
+        # Converts the cart item into data that can be saved or displayed
         return {
             "book_id": self.book_id,
             "title": self.title,

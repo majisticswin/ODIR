@@ -1,17 +1,17 @@
 # customer.py
-# Area 1: Customer Account — Mitul Joarder
-# Handles customer data: registration, password hashing, JSON file storage.
+# Handles customer data, registration, password hashing and JSON file storage
 
 import hashlib
 import json
 import os
 
-# Path to the flat-file database (easy to swap for a real DB later)
+# Path to the customer JSON data file
 CUSTOMERS_FILE = os.path.join(os.path.dirname(__file__), 'customers.json')
 
 
 class Customer:
     def __init__(self, first_name, last_name, email, phone, password_hash):
+        # User details are cleaned before they are saved
         self.first_name   = first_name.strip()
         self.last_name    = last_name.strip()
         self.email        = email.strip().lower()
@@ -49,7 +49,7 @@ class Customer:
             d['password_hash'],
         )
 
-    # File-backed persistence
+    # File based persistence
 
     @staticmethod
     def _load_all():
@@ -81,6 +81,7 @@ class Customer:
         records = Customer._load_all()
         for i, record in enumerate(records):
             if record['email'] == self.email:
+                # Existing accounts are updated instead of duplicated
                 records[i] = self.to_dict()
                 Customer._save_all(records)
                 return

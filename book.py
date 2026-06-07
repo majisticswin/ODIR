@@ -21,6 +21,7 @@ class Book:
         return self.stock > 0
 
     def to_dict(self):
+        # Converts the book object into data that the templates and search can use
         return {
             "book_id": self.book_id,
             "isbn": self.isbn,

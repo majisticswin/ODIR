@@ -51,6 +51,7 @@
                         <span class="line-total">${{ "%.2f"|format(item.line_total) }}</span>
                         <form method="POST" action="/cart/update" class="qty-stepper">
                             <input type="hidden" name="book_id" value="{{ item.book_id }}">
+                            <!-- The plus and minus buttons submit the updated cart quantity -->
                             <button type="button" onclick="changeQuantity(this, -1)">−</button>
                             <input type="number" name="quantity" min="1" value="{{ item.quantity }}">
                             <button type="button" onclick="changeQuantity(this, 1)">+</button>

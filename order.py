@@ -1,5 +1,5 @@
 # order.py
-# Favourite Books - order placement and invoice generation
+# Favourite Books order placement and invoice generation
 
 from datetime import datetime
 
@@ -85,9 +85,11 @@ class OrderManager:
         )
 
     def place_order_from_items(self, customer_name, delivery_address, checkout_items):
+        # This is used for both the cart checkout and direct book order
         customer_name = customer_name.strip()
         delivery_address = delivery_address.strip()
 
+        # Basic validation is done before any stock is changed
         if not customer_name:
             raise ValueError("Customer name cannot be blank")
         if not delivery_address:
@@ -97,6 +99,7 @@ class OrderManager:
 
         order_items = []
         for checkout_item in checkout_items:
+            # Each checkout item is checked before it becomes an order item
             book_id = self._read_checkout_value(checkout_item, "book_id")
             quantity = int(self._read_checkout_value(checkout_item, "quantity"))
 
@@ -114,7 +117,7 @@ class OrderManager:
         order = Order(self._next_order_id(), customer_name, delivery_address, order_items)
         invoice = Invoice(self._next_invoice_id(), order)
 
-        # Stock is reduced only after the whole order has been validated.
+        # Stock is only reduced after the full order has passed validation
         for item in order_items:
             item.book.stock -= item.quantity
 
@@ -123,6 +126,7 @@ class OrderManager:
         return order, invoice
 
     def _read_checkout_value(self, checkout_item, field_name):
+        # Allows checkout data to come from either the cart or a direct order
         if isinstance(checkout_item, dict):
             return checkout_item.get(field_name)
         return getattr(checkout_item, field_name)
