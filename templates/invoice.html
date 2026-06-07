@@ -1,42 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Test Page for Invoice</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice - The Book Haven</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='cart.css') }}" />
 </head>
+
 <body>
-  <h1>Test Page for Invoice</h1>
 
-  <p><strong>Invoice ID:</strong> {{ invoice.invoice_id }}</p>
-  <p><strong>Order ID:</strong> {{ invoice.order_id }}</p>
-  <p><strong>Issue date:</strong> {{ invoice.issue_date }}</p>
-  <p><strong>Customer:</strong> {{ invoice.customer_name }}</p>
-  <p><strong>Delivery address:</strong> {{ invoice.delivery_address }}</p>
-  <p><strong>Order status:</strong> {{ invoice.status }}</p>
-  <p><strong>Payment:</strong> {{ invoice.payment_message }}</p>
+    <nav class="navbar">
+        <a class="brand" href="/">🗂 The Book Haven</a>
+        <a class="nav-link" href="/">Browse Catalogue</a>
+    </nav>
 
-  <h2>Order items</h2>
-  <table border="1" cellpadding="6" cellspacing="0">
-    <tr>
-      <th>Book</th>
-      <th>Author</th>
-      <th>Quantity</th>
-      <th>Unit price</th>
-      <th>Line total</th>
-    </tr>
-    {% for item in invoice.order_items %}
-    <tr>
-      <td>{{ item.title }}</td>
-      <td>{{ item.author }}</td>
-      <td>{{ item.quantity }}</td>
-      <td>${{ "%.2f"|format(item.unit_price) }}</td>
-      <td>${{ "%.2f"|format(item.line_total) }}</td>
-    </tr>
-    {% endfor %}
-  </table>
+    <header class="hero">
+        <h1>Invoice</h1>
+        <p>Order placed successfully</p>
+    </header>
 
-  <p><strong>Total payable:</strong> ${{ "%.2f"|format(invoice.total_payable) }}</p>
+    <main class="invoice-layout">
+        <section class="invoice-card">
+            <h2>Invoice Details</h2>
 
-  <p><a href="/">Back to catalogue</a></p>
+            <div class="invoice-details">
+                <p><strong>Invoice ID:</strong> {{ invoice.invoice_id }}</p>
+                <p><strong>Order ID:</strong> {{ invoice.order_id }}</p>
+                <p><strong>Issue date:</strong> {{ invoice.issue_date }}</p>
+                <p><strong>Customer:</strong> {{ invoice.customer_name }}</p>
+                <p><strong>Delivery address:</strong> {{ invoice.delivery_address }}</p>
+                <p><strong>Order status:</strong> {{ invoice.status }}</p>
+                <p><strong>Payment:</strong> {{ invoice.payment_message }}</p>
+            </div>
+
+            <h2>Order Items</h2>
+            <table class="invoice-table">
+                <tr>
+                    <th>Book</th>
+                    <th>Author</th>
+                    <th>Quantity</th>
+                    <th>Unit price</th>
+                    <th>Line total</th>
+                </tr>
+                {% for item in invoice.order_items %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.author }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ "%.2f"|format(item.unit_price) }}</td>
+                    <td>${{ "%.2f"|format(item.line_total) }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <div class="invoice-total">
+                <span>Total payable</span>
+                <strong>${{ "%.2f"|format(invoice.total_payable) }}</strong>
+            </div>
+
+            <a href="/" class="btn-primary">Back to catalogue</a>
+        </section>
+    </main>
+
 </body>
 </html>

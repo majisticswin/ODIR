@@ -38,7 +38,7 @@ class Invoice:
         self.invoice_id = invoice_id
         self.order = order
         self.issue_date = datetime.now()
-        self.payment_message = "Payment has been processed for demonstration purposes."
+        self.payment_message = "Payment has been processed."
 
     def total_payable(self):
         return self.order.total_price()
