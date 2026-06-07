@@ -6,6 +6,7 @@ from flask import session, redirect, url_for  # Added by Mitul: needed for custo
 from catalogue import Catalogue, CatalogueManager
 from data import seed_catalogue
 from customer import Customer  # Added by Mitul: Customer Account (Area 1)
+from order import OrderManager
 
 app = Flask(__name__)
 app.secret_key = 'bookstore-secret-2026'  # Added by Mitul: required for session
@@ -14,6 +15,7 @@ app.secret_key = 'bookstore-secret-2026'  # Added by Mitul: required for session
 catalogue = Catalogue()
 seed_catalogue(catalogue)
 manager = CatalogueManager(catalogue)
+order_manager = OrderManager(manager)
 
 
 @app.route("/")
@@ -45,6 +47,29 @@ def book_detail(book_id):
         return "Book not found", 404
     return render_template("book_detail.html", book=book.to_dict())
 
+
+
+@app.route("/order/<book_id>", methods=["GET", "POST"])
+def place_order(book_id):
+    # Route for order placement and invoice generation.
+    book = manager.get_book_by_id(book_id)
+    if not book:
+        return "Book not found", 404
+
+    error = None
+    if request.method == "POST":
+        try:
+            order, invoice = order_manager.place_order(
+                customer_name=request.form.get("customer_name", ""),
+                delivery_address=request.form.get("delivery_address", ""),
+                book_id=book_id,
+                quantity=request.form.get("quantity", "1")
+            )
+            return render_template("invoice.html", invoice=invoice.to_dict())
+        except ValueError as exc:
+            error = str(exc)
+
+    return render_template("order_form.html", book=book.to_dict(), error=error)
 
 # =============================================================================
 # Added by Mitul — Area 1: Customer Account (Register / Login / Logout)

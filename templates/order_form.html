@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order and Invoice</title>
+</head>
+<body>
+  <h1>Order and Invoice</h1>
+
+  <p><a href="/book/{{ book.book_id }}">Back to book details</a></p>
+
+  <h2>Selected book</h2>
+  <p>
+    <strong>{{ book.title }}</strong><br>
+    Author: {{ book.author }}<br>
+    ISBN: {{ book.isbn }}<br>
+    Availability: {% if book.in_stock %}In stock{% else %}Out of stock{% endif %}<br>
+    Price: ${{ "%.2f"|format(book.price) }}
+  </p>
+
+  {% if error %}
+    <p><strong>Error:</strong> {{ error }}</p>
+  {% endif %}
+
+  <form method="post">
+    <p>
+      <label for="customer_name">Customer name</label><br>
+      <input id="customer_name" name="customer_name" type="text" placeholder="John Smith">
+    </p>
+
+    <p>
+      <label for="delivery_address">Delivery address</label><br>
+      <textarea id="delivery_address" name="delivery_address" placeholder="123 Name Street, City State 0000"></textarea>
+    </p>
+
+    <p>
+      <label for="quantity">Quantity</label><br>
+      <input id="quantity" name="quantity" type="number" min="1" value="1">
+    </p>
+
+    <button type="submit">Create test order and invoice</button>
+  </form>
+</body>
+</html>
