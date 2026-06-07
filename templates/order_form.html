@@ -2,43 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Order and Invoice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order and Invoice - The Book Haven</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='cart.css') }}">
 </head>
 <body>
-  <h1>Order and Invoice</h1>
+  <header class="site-header">
+    <a class="site-brand" href="/">🏪 The Book Haven</a>
+    <div class="site-links">
+      <a href="/">Browse Catalogue</a>
+      {% if session.customer_name %}
+        <a href="/account">👤 {{ session.customer_name }}</a>
+      {% else %}
+        <a href="/login">Login</a>
+      {% endif %}
+    </div>
+  </header>
 
-  <p><a href="/book/{{ book.book_id }}">Back to book details</a></p>
+  <header class="hero">
+    <h1>Order and Invoice</h1>
+    <p>Create an order for the selected book</p>
+  </header>
 
-  <h2>Selected book</h2>
-  <p>
-    <strong>{{ book.title }}</strong><br>
-    Author: {{ book.author }}<br>
-    ISBN: {{ book.isbn }}<br>
-    Availability: {% if book.in_stock %}In stock{% else %}Out of stock{% endif %}<br>
-    Price: ${{ "%.2f"|format(book.price) }}
-  </p>
+  <main class="invoice-layout">
+    <section class="invoice-card">
+      <a href="/book/{{ book.book_id }}" class="btn-continue">← Back to book details</a>
 
-  {% if error %}
-    <p><strong>Error:</strong> {{ error }}</p>
-  {% endif %}
+      <h2>Selected Book</h2>
+      <div class="invoice-details">
+        <p><strong>Title:</strong> {{ book.title }}</p>
+        <p><strong>Author:</strong> {{ book.author }}</p>
+        <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+        <p><strong>Availability:</strong> {% if book.in_stock %}In stock{% else %}Out of stock{% endif %}</p>
+        <p><strong>Price:</strong> ${{ "%.2f"|format(book.price) }}</p>
+      </div>
 
-  <form method="post">
-    <p>
-      <label for="customer_name">Customer name</label><br>
-      <input id="customer_name" name="customer_name" type="text" placeholder="John Smith">
-    </p>
+      {% if error %}
+        <p class="status-msg error">{{ error }}</p>
+      {% endif %}
 
-    <p>
-      <label for="delivery_address">Delivery address</label><br>
-      <textarea id="delivery_address" name="delivery_address" placeholder="123 Name Street, City State 0000"></textarea>
-    </p>
+      <form method="post" class="order-form">
+        <div class="checkout-field">
+          <label for="customer_name">Customer name</label>
+          <input id="customer_name" name="customer_name" type="text" placeholder="John Smith">
+        </div>
 
-    <p>
-      <label for="quantity">Quantity</label><br>
-      <input id="quantity" name="quantity" type="number" min="1" value="1">
-    </p>
+        <div class="checkout-field">
+          <label for="delivery_address">Delivery address</label>
+          <textarea id="delivery_address" name="delivery_address" placeholder="123 Name Street, City State 0000"></textarea>
+        </div>
 
-    <button type="submit">Create test order and invoice</button>
-  </form>
+        <div class="checkout-field">
+          <label for="quantity">Quantity</label>
+          <input id="quantity" name="quantity" type="number" min="1" value="1">
+        </div>
+
+        <button type="submit" class="btn-checkout">Create order and invoice</button>
+      </form>
+    </section>
+  </main>
 </body>
 </html>

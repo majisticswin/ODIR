@@ -7,17 +7,24 @@
     <title>Invoice - The Book Haven</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='cart.css') }}" />
 </head>
 
 <body>
 
-    <nav class="navbar">
-        <a class="brand" href="/">🗂 The Book Haven</a>
-        <a class="nav-link" href="/">Browse Catalogue</a>
-    </nav>
+    <header class="site-header">
+        <a class="site-brand" href="/">🏪 The Book Haven</a>
+        <div class="site-links">
+            <a href="/">Browse Catalogue</a>
+            {% if session.customer_name %}
+                <a href="/account">👤 {{ session.customer_name }}</a>
+            {% else %}
+                <a href="/login">Login</a>
+            {% endif %}
+        </div>
+    </header>
 
     <header class="hero">
         <h1>Invoice</h1>
