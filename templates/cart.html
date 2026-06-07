@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Cart - The Book Haven</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='cart.css') }}" />
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a class="brand" href="/">🗂 The Book Haven</a>
+        <a class="nav-link" href="/">Browse Catalogue</a>
+    </nav>
+
+    <header class="hero">
+        <h1>Your Cart</h1>
+        <p>{{ items|length }} item{% if items|length != 1 %}s{% endif %} in your cart</p>
+    </header>
+
+    <main class="cart-layout">
+
+        <section class="cart-items">
+
+            {% if items %}
+                {% for item in items %}
+                <div class="cart-card">
+                    <div class="book-thumb" style="background: {{ item.colour }}">
+                        <span>{{ item.title }}</span>
+                    </div>
+                    <div class="book-info">
+                        <span class="book-category">{{ item.category }}</span>
+                        <span class="book-title">{{ item.title }}</span>
+                        <span class="book-author">{{ item.author }}</span>
+                        <span class="book-price">${{ "%.2f"|format(item.price) }}</span>
+                    </div>
+                    <div class="cart-actions">
+                        <span class="line-total">${{ "%.2f"|format(item.line_total) }}</span>
+                        <form method="POST" action="/cart/update" class="qty-stepper">
+                            <input type="hidden" name="book_id" value="{{ item.book_id }}">
+                            <button type="submit" name="quantity" value="{{ item.quantity - 1 if item.quantity > 1 else 1 }}">−</button>
+                            <input type="number" name="quantity" min="1" value="{{ item.quantity }}" readonly>
+                            <button type="submit" name="quantity" value="{{ item.quantity + 1 }}">+</button>
+                        </form>
+                        <form method="POST" action="/cart/remove">
+                            <input type="hidden" name="book_id" value="{{ item.book_id }}">
+                            <button type="submit" class="btn-remove">Remove</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <p>Your cart is empty.</p>
+                    <a href="/" class="btn-primary">Browse Catalogue</a>
+                </div>
+            {% endif %}
+
+        </section>
+
+        <aside class="order-summary">
+            <h2>Order Summary</h2>
+
+            {% if error %}
+                <p class="status-msg error">{{ error }}</p>
+            {% endif %}
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>${{ "%.2f"|format(subtotal) }}</span>
+            </div>
+            <div class="summary-row">
+                <span>Shipping</span>
+                <span>${{ "%.2f"|format(shipping) }}</span>
+            </div>
+            <div class="summary-row total-row">
+                <span>Total</span>
+                <span>${{ "%.2f"|format(total) }}</span>
+            </div>
+
+            <form method="POST" action="/cart/checkout">
+                <div class="checkout-field">
+                    <label for="customer_name">Customer name</label>
+                    <input id="customer_name" name="customer_name" type="text" placeholder="e.g. John Smith" required>
+                </div>
+
+                <div class="checkout-field">
+                    <label for="delivery_address">Delivery address</label>
+                    <textarea id="delivery_address" name="delivery_address" placeholder="e.g. 123 Name Street, City State 0000" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-checkout" {% if not items %}disabled{% endif %}>Proceed to Checkout</button>
+            </form>
+
+            <a href="/" class="btn-continue">← Continue Shopping</a>
+        </aside>
+
+    </main>
+
+</body>
+</html>
