@@ -2,14 +2,14 @@
 # Favourite Books — Area 2: Browse Catalogue & Search Books
 
 from flask import Flask, render_template, request, jsonify
-from flask import session, redirect, url_for  # Added by Mitul: needed for customer account routes
+from flask import session, redirect, url_for  
 from catalogue import Catalogue, CatalogueManager
 from data import seed_catalogue
-from customer import Customer  # Added by Mitul: Customer Account (Area 1)
+from customer import Customer  
 from order import OrderManager
 
 app = Flask(__name__)
-app.secret_key = 'bookstore-secret-2026'  # Added by Mitul: required for session
+app.secret_key = 'bookstore-secret-2026'  
 
 # Bootstrap: creates catalogue, loads data, wraps in manager
 catalogue = Catalogue()
@@ -17,6 +17,7 @@ seed_catalogue(catalogue)
 manager = CatalogueManager(catalogue)
 order_manager = OrderManager(manager)
 
+# Added by Dan: For Browse Catalogue & Search Books
 
 @app.route("/")
 def index():
@@ -71,9 +72,9 @@ def place_order(book_id):
 
     return render_template("order_form.html", book=book.to_dict(), error=error)
 
-# =============================================================================
+
 # Added by Mitul — Area 1: Customer Account (Register / Login / Logout)
-# =============================================================================
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -138,10 +139,6 @@ def account():
         session.clear()
         return redirect(url_for('login'))
     return render_template('account.html', customer=customer)
-
-# =============================================================================
-# End of Mitul's section
-# =============================================================================
 
 
 if __name__ == "__main__":

@@ -18,10 +18,8 @@ class Customer:
         self.phone        = phone.strip()
         self.password_hash = password_hash
 
-    # -------------------------------
+    
     # Password helpers
-    # -------------------------------
-
     @staticmethod
     def hash_password(plain_text):
         """Return SHA-256 hex digest of a plain-text password."""
@@ -30,10 +28,8 @@ class Customer:
     def check_password(self, plain_text):
         return self.password_hash == Customer.hash_password(plain_text)
 
-    # -------------------------------
+    
     # Serialisation
-    # -------------------------------
-
     def to_dict(self):
         return {
             'first_name':    self.first_name,
@@ -53,9 +49,7 @@ class Customer:
             d['password_hash'],
         )
 
-    # -------------------------------
     # File-backed persistence
-    # -------------------------------
 
     @staticmethod
     def _load_all():

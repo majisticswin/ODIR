@@ -12,5 +12,12 @@
     "email": "mitul@test.com",
     "phone": "0412345678",
     "password_hash": "07480fb9e85b9396af06f006cf1c95024af2531c65fb505cfbd0add1e2f31573"
+  },
+  {
+    "first_name": "Dan",
+    "last_name": "Thammisetty",
+    "email": "dan1234@gmail.com",
+    "phone": "0412345674",
+    "password_hash": "ab38eadaeb746599f2c1ee90f8267f31f467347462764a24d71ac1843ee77fe3"
   }
 ]
