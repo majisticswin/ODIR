@@ -29,9 +29,9 @@ A lightweight, multi-module online bookstore built with **Python (Flask)** and *
 | Area | Feature | Developer |
 |------|---------|-----------|
 | **1** | Customer Account (Register / Login / Logout) | Mitul Joarder |
-| **2** | Browse Book Catalogue & Search | *(teammate)* |
-| **3** | Manage Shopping Cart | *(teammate)* |
-| **4** | Place Order & Invoice | *(teammate)* |
+| **2** | Browse Book Catalogue & Search | Dan Thammisetty |
+| **3** | Manage Shopping Cart | Mun Yong Deng |
+| **4** | Place Order & Invoice | Alexander Ozimkovsky-Klein |
 
 > Each developer works in their own section. When integration into shared files (`App.py`, `index.html`) was required, additions are clearly marked with `# Added by Mitul` comments and no existing code was modified.
 

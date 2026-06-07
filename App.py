@@ -26,8 +26,7 @@ def get_cart(customer_id="guest"):
     carts[customer_id].remove_expired_items()
     return carts[customer_id]
 
-# Added by Dan: For Browse Catalogue & Search Books
-
+# Added by Dan: Aread 1 For Browse Catalogue
 @app.route("/")
 def index():
     categories = manager.get_all_categories()
@@ -57,7 +56,7 @@ def book_detail(book_id):
         return "Book not found", 404
     return render_template("book_detail.html", book=book.to_dict())
 
-
+# Added by Mun — Area 3: Manage Shopping Cart
 @app.route("/cart")
 def cart_page():
     cart = get_cart()
@@ -109,7 +108,7 @@ def cart_update():
         return redirect(url_for("cart_page", error=str(exc)))
     return redirect(url_for("cart_page"))
 
-
+# Added by Alex — Area 4: Place Order & Invoice
 @app.route("/cart/checkout", methods=["POST"])
 def cart_checkout():
     cart = get_cart()
@@ -147,7 +146,7 @@ def place_order(book_id):
 
     return render_template("order_form.html", book=book.to_dict(), error=error)
 
-# Added by Mitul — Area 1: Customer Account (Register / Login / Logout)
+# Added by Mitul — Area 1: Customer Account
 
 
 @app.route('/register', methods=['GET', 'POST'])
