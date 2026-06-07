@@ -1,0 +1,16 @@
+[
+  {
+    "first_name": "mitul",
+    "last_name": "joarder",
+    "email": "m.jr@gmail.com",
+    "phone": "61412231234",
+    "password_hash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"
+  },
+  {
+    "first_name": "Mitul",
+    "last_name": "Joarder",
+    "email": "mitul@test.com",
+    "phone": "0412345678",
+    "password_hash": "07480fb9e85b9396af06f006cf1c95024af2531c65fb505cfbd0add1e2f31573"
+  }
+]
