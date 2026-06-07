@@ -113,6 +113,11 @@ body {
     color: #666;
 }
 
+
+.book-thumb { 
+    background: var(--thumb-bg); 
+}
+
 .book-price {
     color: #cc0000;
     font-weight: 600;
